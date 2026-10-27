@@ -182,6 +182,10 @@ details.more>summary::-webkit-details-marker{display:none;}
 details.more>summary::before{content:"\25B8  ";}
 details.more[open]>summary::before{content:"\25BE  ";}
 
+.shard{background:linear-gradient(160deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem;}
+.shard .big{font-family:var(--display);font-size:1.8rem;color:var(--accent);font-variant-numeric:tabular-nums;}
+.shard .of{color:var(--muted);}
+.shard .prog{margin:.4rem 0 .5rem;}
 /* lignes de rang */
 .vrows{display:grid;gap:.45rem;}
 .vrow{border:1px solid var(--line);border-radius:12px;padding:.55rem .7rem;display:grid;gap:.35rem;background:var(--surface2);}
@@ -297,7 +301,7 @@ var RITUEL=[
  {k:"c4",t:"Un éther de chaque type dans le sac avant un donjon",s:"Pour les Pots. Et choisir la Vision à monter avant de les examiner."},
  {k:"c5",t:"Lire les trois réponses quand un dialogue porte sur un compagnon",s:"Bonus permanent. Détail dans le plan du chapitre."},
  {k:"c6",t:"Noter les maîtres de caverne trop forts, revenir plus tard",s:"Quinze cavernes, du niveau 15 au 60. Chacun attend dans sa caverne."},
- {k:"c7",t:"Ramasser les éclats de tablette au fil des chapitres",s:"99 au total, les 3 derniers dans la Tour de cristal. La seule collecte conseillée dans l'ordre."},
+ {k:"c7",t:"Ramasser les éclats de tablette du chapitre",s:"Liste et compteur juste en dessous. Repasse au Palais de l'Oubli (Grandport) à chaque palier."},
  {k:"c8",t:"Repasser au Palais de l'Oubli réclamer les récompenses",s:"Elles s'accumulent avec ta progression."},
  {k:"c9",t:"Une série au Colisée (dès le chapitre 4)",s:"Le 5e combat de la ligue débutante donne le Marteau de Gaia, qui mène à Titan."}
 ];
@@ -381,6 +385,114 @@ var CH=[
   {k:"ch8c",g:"avert",t:"Accepter la sauvegarde de fin quand le jeu la propose",s:"Elle te remet juste avant la zone finale, monde entier ouvert. Il n'y a pas de New Game+ : c'est ça, le post-game."}
  ]}
 ];
+var SHARDS=[
+ [1,"Grandshelt, quartier commercial","À gauche des étals, parmi les caisses."],
+ [1,"Village de Kol","À gauche du bassin, au sud-ouest du village."],
+ [1,"Felicitas","À l'est, après le pont de bois, à droite du mur de pierre."],
+ [1,"Felicitas","À l'ouest après le pont, sentier caché derrière la torche, derrière un mur à gauche."],
+ [1,"Ruines de Kolobos","Deuxième zone, en bas des marches, derrière deux cylindres."],
+ [1,"Ruines de Kolobos","Derrière un pilier effondré, après la chute du pont."],
+ [1,"Port de Grandport","Au sud de la boutique d'objets, sur la jetée, derrière des tonneaux."],
+ [1,"Port de Grandport","À l'ouest de l'armurerie, au pied d'un arbre."],
+ [1,"Caverne des Épées","Derrière une stalagmite au fond de la grotte."],
+ [1,"Tour de la Sirène","Après la fontaine, escalier de droite, bord de la corniche."],
+ [1,"Tour de la Sirène","Sommet de la première grande zone, bout de la corniche droite."],
+ [1,"Tour de la Sirène","Salle suivante, en haut des marches, bout de la corniche gauche."],
+ [2,"Dilmagia","Première zone à gauche, coin près du PNJ devant la grille."],
+ [2,"Dilmagia","Deuxième intersection de la zone principale, derrière des caisses."],
+ [2,"Dilmagia, chantier","Chemin du haut, à côté d'une échelle."],
+ [2,"Dilmagia, chantier","Escalier en bas à droite, près de la troisième poutrelle."],
+ [2,"Mont Thunderclap","Chemin difficile, après un arbre jaunâtre, au tournant."],
+ [2,"Mont Thunderclap","Chemin facile (payant), près d'un arbre après la longue échelle."],
+ [2,"Mont Thunderclap, carte du monde","Au sud du donjon, derrière des rochers par une petite rampe."],
+ [2,"Forge naine","Sud-ouest, après un pont de bois, bout sud du chemin."],
+ [2,"Forge naine","Nord-ouest, en bas des marches, côté sud du chemin."],
+ [2,"Chantier naval de Mobliz","À l'ouest de la première zone, derrière des caisses."],
+ [2,"Chantier naval de Mobliz","Premier monte-charge, trou dans la clôture à l'est, échelle au sud-est, puis à l'ouest."],
+ [2,"Chantier naval de Mobliz","Deuxième monte-charge, au nord, derrière un conteneur."],
+ [2,"Sanctuaire du Vent","Première salle, derrière le pilier de droite."],
+ [2,"Sanctuaire du Vent","Haut d'un escalier, entre les marches et la rambarde."],
+ [2,"Sanctuaire du Vent","Plateforme de l'ascenseur de cristal, côté gauche."],
+ [3,"Olderion","À droite de la plateforme centrale, près du PNJ des tours en bateau."],
+ [3,"Olderion","Bassin central aux deux statues, derrière celle de gauche."],
+ [3,"Olderion","Nord-est, après une roue à eau, sur un pont de pierre."],
+ [3,"Olderion","Marches au nord du bassin aux statues, derrière un arbre."],
+ [3,"Grotte des Eaux","À gauche du quai, après le labyrinthe en bateau."],
+ [3,"Grotte des Eaux","Devant une cascade, après la porte du labyrinthe en bateau."],
+ [3,"Grotte des Eaux","Chemin caché à gauche de la salle d'entrée, en haut des échelles."],
+ [3,"Chemin des Cascades","À l'est des marches, à côté d'une échelle."],
+ [3,"Chemin des Cascades","Sur une plateforme de pierre dans la grande salle de la cascade."],
+ [3,"Chemin des Cascades","Même salle, au nord par les ponts de bois, sur un rocher."],
+ [3,"Amore","Au sud des boutiques, près d'un puits sur un îlot d'herbe."],
+ [3,"Amore","Au nord de la boutique d'objets avant le long pont, près d'un arbre."],
+ [3,"Sanctuaire de l'Eau","Salle de la plateforme circulaire, en bas des marches nord."],
+ [3,"Sanctuaire de l'Eau","Section en bateau, nord-est après un balcon, corniche droite."],
+ [3,"Sanctuaire de l'Eau","À gauche d'une longue échelle."],
+ [4,"Station Mozul","Coin sud-ouest."],
+ [4,"Station de la capitale","À côté de l'escalier est."],
+ [4,"Zoldaad, place du château","À l'est de l'arrêt du tram."],
+ [4,"Zoldaad, quartier résidentiel","Coin sud-est."],
+ [4,"Zoldaad, bas quartiers","À l'est de l'arrivée, près de tonneaux."],
+ [4,"Tunnel souterrain","Coin d'une salle au sud."],
+ [4,"Tunnel souterrain","Entrée cachée sous un pont métallique."],
+ [4,"Repaire rebelle","Nord-ouest, passage caché derrière une salle, en haut d'une échelle."],
+ [4,"Repaire rebelle","Nord-est, escalier de droite, derrière un pilier métallique."],
+ [4,"Usine d'armes","Zone du sol de lave, à l'ouest, interrupteur de cristal et poutrelle."],
+ [4,"Usine d'armes","Zone du sol de lave, échelle près du point de sauvegarde, interrupteur de gauche."],
+ [4,"Donjon","Salle des cellules au sud, première cellule à droite."],
+ [4,"Donjon","Première salle, cellule déverrouillable côté ouest."],
+ [4,"Château de Zoldaad","Derrière la statue de cheval de gauche, marches du trône."],
+ [4,"Château de Zoldaad","Couloir de droite après la salle du trône, première porte, coin sud-est."],
+ [4,"Colisée (Grandshelt)","Chemin initial à l'ouest. S'ouvre au chapitre 4."],
+ [5,"Mysidia","Entrée principale, escalier de droite près du cristal de téléportation, dans le coin."],
+ [5,"Mysidia","Devanture, au sud de l'armurerie, près de caisses."],
+ [5,"Mysidia","À l'ouest après la boutique d'objets, zone de la fontaine, deuxième pilier à droite."],
+ [5,"Bibliothèque arcanique","Salle d'entrée, sud-ouest, parmi les pupitres."],
+ [5,"Bibliothèque arcanique","Dernière salle près du second point de sauvegarde, balcon ouest."],
+ [5,"Village de Sunioo","Juste à l'entrée, entre un banc et un pot."],
+ [5,"Village de Sunioo","Bord nord-est, près d'un bonhomme de neige devant un igloo."],
+ [5,"Ruines sans nom","Première salle, tout à l'ouest, près d'un pilier tombé."],
+ [5,"Ruines sans nom","Deuxième zone, au sud du point de sauvegarde, en bas des marches."],
+ [5,"Psyché de Fina (1)","À gauche de la grande grille cadenassée, sous une chaîne."],
+ [5,"Psyché de Fina (1)","Zone des tentes à l'ouest, caisses dans le coin haut droit."],
+ [5,"Psyché de Fina (1)","Clairière au bout de la troisième zone, à l'ouest de la grille."],
+ [5,"Psyché de Fina (2)","Petit camp militaire au nord, provisions en bas à droite. Retour possible par le livre magique de la tour."],
+ [5,"Tour de Mysidia","Haut des marches de l'entrée, derrière un grand cristal."],
+ [5,"Tour de Mysidia","Palier de l'escalier en spirale."],
+ [5,"Tour de Mysidia","Palier plus haut, avant le Pot azur."],
+ [5,"Tour de Mysidia","Congère après le Pot azur."],
+ [6,"Gaberada","Côté droit d'une maison au nord-ouest."],
+ [6,"Ruines du centre de recherche","Niveau 1 vers l'ouest, salle aux bureaux et téléporteur vert."],
+ [6,"Ruines du centre de recherche","Niveau 1, salle aux trois consoles, étagères au sud-est."],
+ [6,"Ruines du centre de recherche","Niveau 2 vers l'est, salle du téléporteur, passerelle de droite."],
+ [6,"Sentier de montagne","À l'ouest du premier point de sauvegarde, sous un arbre mort."],
+ [6,"Sentier de montagne","À l'est, en bas d'une rampe depuis le second point de sauvegarde, dans le coin."],
+ [6,"Duggle","Au nord, à l'est de l'entrée de la boutique, derrière une cascade."],
+ [6,"Sanctuaire de Gronoa","Bout sud du palier après la première salle."],
+ [6,"Sanctuaire de Gronoa","Escalier bloqué par un pilier tombé, par les marches ouest."],
+ [6,"Sanctuaire de Gronoa","Près d'un pilier brisé, après une longue échelle et une échelle parallèle."],
+ [6,"Sanctuaire Sanctissimus","Salle cachée sous une torche, haut d'une échelle près d'un Pot violet."],
+ [6,"Sanctuaire Sanctissimus","Salle de l'ascenseur de cristal, après le troisième ascenseur."],
+ [7,"Sian","À l'est après la boutique d'objets, sous un arbre en fleurs."],
+ [7,"Mont Reizan","Chemin du bas au croisement de la rampe."],
+ [7,"Mont Reizan","Plateforme entre deux ponts de bois, près des pins."],
+ [7,"Lac Ryusei","Côté ouest, sous un arbre."],
+ [7,"Chemin forestier","Au nord du premier point de sauvegarde, dans un virage."],
+ [7,"Chemin forestier","Au sud-ouest du second point de sauvegarde, cul-de-sac."],
+ [7,"Terres errantes","À gauche à la première fourche après le point de sauvegarde."],
+ [7,"Terres errantes","Parmi les pierres, après une scène."],
+ [8,"Tour de cristal","À droite à la première fourche du chemin principal."],
+ [8,"Tour de cristal","À gauche à la fourche suivante, puis à droite."],
+ [8,"Tour de cristal","Zone du pont translucide, au nord puis à l'ouest le long du pont."],
+ [8,"Gueule du dragon","Vers la fin, là où tombe l'armure Magitek rebelle. Zone optionnelle de fin de jeu."]
+];
+var PALIERS=[[3,"premier coffre, trophée"],[28,"premier souvenir"],[60,"second souvenir, trophée Memento"],[76,"Ancient Firearm (Arme légendaire)"],[80,"Adamantite"],[84,"Ancient Whip (Arme légendaire)"],[89,"Adamantite, trophée"],[98,"Arch Drain"],[99,"Lightbringer"]];
+function shardItems(c){ var out=[]; SHARDS.forEach(function(s,i){ if(s[0]===c) out.push({k:"t"+(i+1),t:s[1],s:s[2]}); }); return out; }
+function shardTotal(){ var n=0; SHARDS.forEach(function(s,i){ if(st.done["t"+(i+1)]) n++; }); return n; }
+function shardBar(){
+  var n=shardTotal(), next=null; for(var i=0;i<PALIERS.length;i++){ if(PALIERS[i][0]>n){ next=PALIERS[i]; break; } }
+  return '<div class="shard"><div><span class="big">'+n+'</span><span class="of"> / 99 éclats de tablette</span></div><div class="prog"><i style="width:'+Math.round(100*n/99)+'%"></i></div><p class="note">'+(next?'Prochain palier au Palais de l\'Oubli : <b>'+next[0]+'</b>, '+next[1]+'.':'Tout est rendu à la princesse.')+' 89 suffisent pour les trophées.</p></div>';
+}
 var POST=[
  {k:"p1",t:"Gilgamesh, niveaux 40 puis 45",s:"La chasse commence à la tour de la Sirène. Gants puis Armure Genji."},
  {k:"p2",t:"Sephiroth, niveau 45, à Whirlpool Hollow",s:"Donne sa Vision, la 26e."},
@@ -389,7 +501,7 @@ var POST=[
  {k:"p5",t:"Ligue Champion du Colisée : Bête de la ruine (90), Shinryu (95), Omega (99)",s:"S'ouvre après la ligue Gladiateur. Pas de trophée, juste le meilleur équipement."},
  {k:"p6",t:"Les 15 maîtres de caverne",s:"Trophées au 1er, au 5e et au 15e. Les deux plus forts (niveau 60) sont à Pharm."},
  {k:"p7",t:"Les 12 Armes légendaires, chambre des Armes à Dirnado",s:"Épreuves au niveau 50, ultimes au niveau 75 pour la forme « + »."},
- {k:"p8",t:"99 éclats de tablette",s:"89 suffisent pour les trophées, 99 pour Lightbringer."},
+ {k:"p8",t:"99 éclats de tablette",s:"89 suffisent pour les trophées, 99 pour Lightbringer. Le compteur est dans Chapitres."},
  {k:"p9",t:"Les 5 navires marchands",s:"Un objet chacun, une seule fois. Le dernier n'apparaît qu'avec le radar à trésors bien avancé."}
 ];
 var GL={vision:"Vision",esper:"Esper",pot:"Pot",choix:"Choix",quete:"Quête",avert:"Attention",coffre:"Coffre"};
@@ -516,6 +628,7 @@ function rChapitres(){
     '<p class="note">Le chapitre choisi ici sert aussi à l\'onglet Équipe : seuls les compagnons déjà rencontrés y apparaissent.</p>';
   if(c.note) h+='<div class="card accent"><p>'+esc(c.note)+'</p></div>';
   h+=listBox('ch'+c.n,'À faire dans ce chapitre',c.items);
+  var si=shardItems(c.n); h+=shardBar()+listBox('sh'+c.n,'Éclats de tablette du chapitre',si,{note:'Pierres qui brillent faiblement dans les villes et donjons. Rien n\'est ratable, tout rouvre après l\'histoire, mais ramasse-les en passant : c\'est moins de trajets.'});
   h+='<details class="more" id="rituel-wrap"><summary>Rituel à dérouler à chaque chapitre</summary>'+listBox('rituel',null,RITUEL,{note:'Même liste à chaque chapitre. Remets-la à zéro quand tu changes de chapitre.',reset:'Nouveau chapitre'})+'</details>';
   return h;
 }
@@ -651,6 +764,7 @@ document.addEventListener('change',function(e){
     t.closest('li').classList.toggle('done',t.checked);
     var box=t.closest('.listbox'); if(box) refreshList(box);
     var cbar=document.querySelector('.chapbar'); if(cbar&&box&&/^ch\d$/.test(box.dataset.list)){ cbar.outerHTML=chapBar(); }
+    var sb=document.querySelector('.shard'); if(sb&&box&&/^sh\d$/.test(box.dataset.list)){ sb.outerHTML=shardBar(); }
     return;
   }
   if(t.classList.contains('sel')&&t.dataset.p){ st.pick[t.dataset.p]=t.value; save(); render(); }
@@ -661,7 +775,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-10-27 12:36";
+  var V="2026-10-27 17:47";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
