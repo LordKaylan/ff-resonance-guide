@@ -403,8 +403,8 @@ var SHARDS=[
  [2,"Dilmagia, chantier","Chemin du haut, à côté d'une échelle."],
  [2,"Dilmagia, chantier","Escalier en bas à droite, près de la troisième poutrelle."],
  [2,"Mont Thunderclap","Chemin difficile, après un arbre jaunâtre, au tournant."],
- [2,"Mont Thunderclap","Chemin facile (payant), près d'un arbre après la longue échelle."],
- [2,"Mont Thunderclap, carte du monde","Au sud du donjon, derrière des rochers par une petite rampe."],
+ [2,"Mont Thunderclap","Chemin facile (payant), près d'un arbre après la longue échelle. Sans payer : même corniche par l'entrée haute, avec la Cape du Raiju."],
+ [2,"Mont Thunderclap, entrée haute","Zone atteinte par la seconde entrée du mont (celle de Ramuh, au sud du sanctuaire de Zidane). Juste après l'entrée, petite rampe de pierre qui descend : l'éclat est derrière les rochers, en contrebas."],
  [2,"Forge naine","Sud-ouest, après un pont de bois, bout sud du chemin."],
  [2,"Forge naine","Nord-ouest, en bas des marches, côté sud du chemin."],
  [2,"Chantier naval de Mobliz","À l'ouest de la première zone, derrière des caisses."],
@@ -775,7 +775,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-10-27 17:47";
+  var V="2026-10-27 20:55";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
