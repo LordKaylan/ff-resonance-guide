@@ -182,6 +182,35 @@ details.more>summary::-webkit-details-marker{display:none;}
 details.more>summary::before{content:"\25B8  ";}
 details.more[open]>summary::before{content:"\25BE  ";}
 
+/* lignes de rang */
+.vrows{display:grid;gap:.45rem;}
+.vrow{border:1px solid var(--line);border-radius:12px;padding:.55rem .7rem;display:grid;gap:.35rem;background:var(--surface2);}
+.vrow.eq{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface2));}
+.vr1{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.vr1 .vname{font-weight:700;}
+.vr1 .meta{display:flex;gap:.25rem;flex-wrap:wrap;}
+.vr1 .meta .tag{margin:0;}
+.eqb{font:inherit;font-size:1.15rem;line-height:1;color:var(--gold);background:transparent;border:0;padding:.1rem .2rem;cursor:pointer;}
+.eqb[aria-pressed="false"]{color:var(--muted);}
+.eqb:focus-visible,.info:focus-visible,.stp button:focus-visible,.lnk:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.info{margin-left:auto;font:700 .85rem var(--body);width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent);cursor:pointer;}
+.vr2{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;}
+.stp{display:inline-flex;align-items:center;gap:.4rem;}
+.stp button{font:700 1.1rem var(--body);width:2.1rem;height:2.1rem;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;}
+.stp button:disabled{opacity:.35;cursor:default;}
+.stp .rk{min-width:3.4rem;text-align:center;font-variant-numeric:tabular-nums;}
+.stp .rk b{color:var(--accent);font-size:1.1rem;}
+.stp.awk{margin:.2rem 0 .6rem;flex-wrap:wrap;}
+.segs{display:flex;gap:3px;flex:1;min-width:6rem;max-width:14rem;}
+.segs i{flex:1;height:8px;border-radius:2px;background:var(--surface);border:1px solid var(--line);}
+.segs i.on{background:linear-gradient(90deg,var(--accent),var(--ok));border-color:transparent;}
+.segs i.ap{border-color:var(--gold);}
+.vr3{font-size:.86rem;color:var(--muted);}
+.vr3 .nx b{color:var(--accent);}
+.vr3 .nx.done{color:var(--ok);}
+.vr3 .mrp{color:var(--muted);font-variant-numeric:tabular-nums;}
+.vdetail{border-top:1px solid var(--line);margin-top:.2rem;}
+.lnk{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;}
 /* visions */
 .seg{display:flex;gap:.3rem;background:var(--surface2);border-radius:999px;padding:.25rem;overflow-x:auto;}
 .seg button{flex:1 0 auto;font:inherit;font-size:.9rem;font-weight:600;color:var(--muted);background:transparent;border:0;border-radius:999px;padding:.45rem .8rem;cursor:pointer;white-space:nowrap;}
@@ -381,6 +410,8 @@ try{
 }catch(e){}
 var h0=(location.hash||"").replace("#","");
 if(["essentiel","chapitres","equipe","visions","apres"].indexOf(h0)>=0) st.tab=h0;
+if(!st.rank){ st.rank={}; for(var mk in st.done){ var mm=/^([^|]+)\|([^|]+)\|MR(\d)\|/.exec(mk); if(mm&&st.done[mk]){ var kk=mm[1]+'|'+mm[2]; st.rank[kk]=Math.max(st.rank[kk]||0,parseInt(mm[3],10)); } } }
+if(!st.awk) st.awk={};
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function byName(n){ for(var i=0;i<D.visions.length;i++){ if(D.visions[i].n===n) return D.visions[i]; } return null; }
@@ -488,27 +519,41 @@ function rChapitres(){
   h+='<details class="more" id="rituel-wrap"><summary>Rituel à dérouler à chaque chapitre</summary>'+listBox('rituel',null,RITUEL,{note:'Même liste à chaque chapitre. Remets-la à zéro quand tu changes de chapitre.',reset:'Nouveau chapitre'})+'</details>';
   return h;
 }
+function rankOf(p,v){ return (st.rank&&st.rank[p+'|'+v])||0; }
+function awkOf(v){ return (st.awk&&st.awk[v])||0; }
+function nextUnlock(v,r){
+  var m=null; v.m.forEach(function(x){ if(x.r===r+1) m=x; });
+  if(!m) return '<span class="nx done">Vision maîtrisée sur ce compagnon.</span>';
+  return '<span class="nx">Prochain : <b>MR'+m.r+'</b> '+esc(m.n)+(m.mrp?' <span class="mrp">'+m.mrp+' MRP cumulés</span>':'')+'</span>';
+}
+function rankRow(p,v){
+  var r=rankOf(p,v.n), eq=st.pick[p]===v.n, rec=(D.reco[p]||[]).indexOf(v.n), aw=awkOf(v.n);
+  var segs=''; for(var i=1;i<=9;i++){ segs+='<i class="'+(i<=r?'on':'')+(i===4?' ap':'')+'"></i>'; }
+  return '<div class="vrow'+(eq?' eq':'')+'" data-p="'+esc(p)+'" data-v="'+esc(v.n)+'">'+
+   '<div class="vr1"><button type="button" class="eqb" data-equip aria-pressed="'+eq+'" aria-label="Vision équipée">'+(eq?'★':'☆')+'</button>'+
+   '<span class="vname">'+esc(v.n)+'</span><span class="meta"><span class="tag vision">'+esc(v.r)+'</span>'+(rec===0?'<span class="tag choix">conseillée</span>':rec===1?'<span class="tag">variante</span>':'')+(aw?'<span class="tag pot">éveil '+aw+'</span>':'')+'</span>'+
+   '<button type="button" class="info" data-info aria-label="Détail de la Vision">?</button></div>'+
+   '<div class="vr2"><div class="stp"><button type="button" data-rank="-1" aria-label="Rang moins un"'+(r<=0?' disabled':'')+'>−</button><span class="rk">MR <b>'+r+'</b></span><button type="button" data-rank="1" aria-label="Rang plus un"'+(r>=9?' disabled':'')+'>+</button></div><div class="segs" aria-hidden="true">'+segs+'</div></div>'+
+   '<div class="vr3">'+nextUnlock(v,r)+'</div>'+
+   '<div class="vdetail" hidden><details class="grp" open><summary>Rangs de maîtrise <small>MR1 à MR9</small></summary><ul class="sk">'+v.m.map(function(m){ return skillRow(null,'MR'+m.r,m); }).join('')+'</ul></details></div></div>';
+}
 function rEquipe(){
-  var h='<p class="chapwhere">Chapitre en cours : <b>'+st.chap+'</b>. Change-le dans l\'onglet Chapitres.</p>'+
-   '<div class="card accent"><h3>Comment ça marche</h3><p>Chaque compagnon porte une Vision. Le rang de maîtrise (MRP) se gagne en combat, par couple compagnon + Vision, et tout ce qu\'il apprend lui reste pour toujours, même après avoir changé de Vision. Les éveils se paient en magicite (éclat, magicite, cristal) et améliorent la Vision pour tout le monde.</p></div>'+
-   '<div class="card gold"><h3>Tourner d\'abord, creuser ensuite</h3><p>Les rangs coûtent de plus en plus cher : <b>MR1 à 10, MR2 à 35, MR3 à 95, MR4 à 195</b>, puis 395, 695, 1 195, 2 195 et 4 195 MRP cumulés. Les quatre premiers rangs d\'une Vision valent donc quatre bonus permanents pour 195 MRP, là où le seul rang 7 en coûte 500.</p><p>La règle : sur chaque compagnon, fais passer <b>chaque Vision disponible au rang 3 ou 4</b> (passif au MR1, +5 Endurance au MR2, compétence active au MR3, +8 de capacité AP au MR4), puis remets sa Vision principale et ne creuse que celle-là. Le +8 AP de chaque Vision est ce qui lui permet d\'équiper plus de compétences apprises. Garde les Pots pour pousser la Vision principale au-delà du rang 6.</p><p class="note">Plan de magicite : Leah puis Cloud, puis Terra et Tidus, puis Bartz. Zidane au rang 1 sur n\'importe qui pour Steal.</p></div>';
+  var h='<div class="chaphead"><h2>Équipe</h2><span class="chapwhere">Chapitre <b>'+st.chap+'</b> · <button type="button" class="lnk" data-tab-go="chapitres">changer</button></span></div>'+
+   '<p class="note">Une ligne par Vision disponible, avec le rang de maîtrise atteint par ce compagnon. Monte chaque Vision au rang 3 ou 4, puis creuse celle que tu équipes (étoile). Le trait clair marque le rang 4, celui du +8 AP.</p>';
   var later=0;
-  h+='<div class="grid2">';
   D.party.forEach(function(p){
     if(p.j>st.chap){ later++; return; }
-    var pick=st.pick[p.n]||'', v=byName(pick), r=D.reco[p.n]||[], reco='';
-    if(r.length){ var rv=byName(r[0]); reco='<p class="reco">Conseil : <b>'+esc(r[0])+'</b>'+(r[1]?', ou '+esc(r[1])+' en variante':'')+'.'+(rv&&rv.c>st.chap?' Elle arrive au chapitre '+rv.c+'.':'')+'</p>'; }
-    var sum='';
-    if(v){
-      var mr=0; v.m.forEach(function(m){ if(st.done[p.n+'|'+v.n+'|MR'+m.r+'|'+m.n]) mr++; });
-      sum='<div class="vsum"><span class="tag vision">'+esc(v.r)+'</span><span>'+(v.a==='physical'?'physique':'magique')+'</span><span>· rangs appris : '+mr+' / '+v.m.length+'</span></div>';
-    }
-    h+='<section class="hero"><header><h3>'+esc(p.n)+'</h3><small>'+esc(p.r)+'</small></header>'+reco+
-      '<select class="sel" aria-label="Vision de '+esc(p.n)+'" data-p="'+esc(p.n)+'">'+options(pick)+'</select>'+sum+
-      (v?'<details class="more"><summary>Compétences, rangs et éveils</summary>'+visionBlock(v,p.n+'|'+v.n)+'</details>':'')+'</section>';
+    var avail=D.visions.filter(function(v){ return v.c<=st.chap; });
+    var reco=D.reco[p.n]||[];
+    avail.sort(function(a,b){ var ra=reco.indexOf(a.n), rb=reco.indexOf(b.n); ra=ra<0?9:ra; rb=rb<0?9:rb; return ra-rb||a.c-b.c||a.n.localeCompare(b.n); });
+    var tot=0, ap=0; avail.forEach(function(v){ var r=rankOf(p.n,v.n); tot+=r; if(r>=4) ap++; });
+    var eq=st.pick[p.n]&&byName(st.pick[p.n]);
+    h+='<section class="hero"><header><h3>'+esc(p.n)+'</h3><small>'+esc(p.r)+'</small></header>'+
+      '<div class="vsum"><span>Équipée : <b>'+(eq?esc(eq.n):'aucune')+'</b></span><span>· '+tot+' rang'+(tot>1?'s':'')+' au total</span><span>· AP +'+(ap*8)+'</span></div>'+
+      '<div class="vrows">'+avail.map(function(v){ return rankRow(p.n,v); }).join('')+'</div></section>';
   });
-  h+='</div>';
   h+='<p class="note">'+(later?later+(later>1?' compagnons arrivent':' compagnon arrive')+' dans les chapitres suivants. Avance le chapitre pour les voir.':'Tout le monde est là.')+'</p>';
+  h+='<details class="more"><summary>Rappel : pourquoi tourner les Visions</summary><div class="card gold"><p>Le rang de maîtrise se gagne en combat, par couple compagnon + Vision, et ce qu\'il apprend lui reste même après avoir changé de Vision. Les rangs coûtent de plus en plus cher : <b>MR1 à 10, MR2 à 35, MR3 à 95, MR4 à 195</b>, puis 395, 695, 1 195, 2 195 et 4 195 MRP cumulés.</p><p>Donc : chaque Vision disponible au rang 3 ou 4 sur chaque compagnon (passif, +5 Endurance, compétence active, +8 AP), puis la Vision principale seulement. Les Pots servent à pousser la principale au-delà du rang 6. Les éveils (magicite) se règlent dans l\'onglet Visions et comptent pour tout le monde.</p></div></details>';
   return h;
 }
 var ROLES=[]; D.visions.forEach(function(v){ if(ROLES.indexOf(v.r)<0) ROLES.push(v.r); });
@@ -524,7 +569,7 @@ function rVisions(){
     ROLES.forEach(function(r){ h+='<button type="button" data-role="'+r+'" aria-pressed="'+(st.role===r)+'">'+r+'</button>'; });
     h+='</div><p class="hits" id="hits"></p><div class="vgrid">';
     D.visions.slice().sort(function(a,b){ return a.c-b.c||a.n.localeCompare(b.n); }).forEach(function(v){
-      h+='<details class="vcard" data-name="'+esc(v.n)+'" data-role="'+esc(v.r)+'"><summary><span><span class="nm">'+esc(v.n)+'</span><span class="meta"><span class="tag vision">'+esc(v.r)+'</span><span class="tag">'+(v.a==='physical'?'physique':'magique')+'</span><span class="tag">'+(v.c>=9?'post-game':'ch. '+v.c)+'</span></span></span></summary><div class="in">'+visionBlock(v,null)+'</div></details>';
+      h+='<details class="vcard" data-name="'+esc(v.n)+'" data-role="'+esc(v.r)+'"><summary><span><span class="nm">'+esc(v.n)+'</span><span class="meta"><span class="tag vision">'+esc(v.r)+'</span><span class="tag">'+(v.a==='physical'?'physique':'magique')+'</span><span class="tag">'+(v.c>=9?'post-game':'ch. '+v.c)+'</span>'+(awkOf(v.n)?'<span class="tag pot">éveil '+awkOf(v.n)+'</span>':'')+'</span></span></summary><div class="in"><div class="stp awk" data-v="'+esc(v.n)+'"><span>Éveil</span><button type="button" data-awk="-1" aria-label="Éveil moins un"'+(awkOf(v.n)<=0?' disabled':'')+'>\u2212</button><span class="rk"><b>'+awkOf(v.n)+'</b> / 4</span><button type="button" data-awk="1" aria-label="Éveil plus un"'+(awkOf(v.n)>=4?' disabled':'')+'>+</button><span class="note">magicite, vaut pour tous</span></div>'+visionBlock(v,null)+'</div></details>';
     });
     h+='</div>';
   } else if(st.vtab==="espers"){
@@ -584,6 +629,16 @@ document.addEventListener('click',function(e){
   if(e.target.closest('button[data-import]')){ var im=document.getElementById('imp'), m2=document.getElementById('xfer-msg');
     try{ var o=JSON.parse(im.value); if(!o||typeof o!=='object'||!o.done) throw 0; for(var k in o.done){ st.done[k]=o.done[k]; } if(o.pick){ for(var k2 in o.pick){ st.pick[k2]=o.pick[k2]; } } if(o.chap) st.chap=o.chap; save(); render(); document.getElementById('xfer-msg').textContent='Progression importée.'; }
     catch(err){ m2.textContent='Ce code n\'est pas lisible. Recopie-le en entier.'; } return; }
+  var go=e.target.closest('button[data-tab-go]');
+  if(go){ st.tab=go.dataset.tabGo; save(); render(); window.scrollTo(0,0); return; }
+  var rk=e.target.closest('button[data-rank]');
+  if(rk){ var row=rk.closest('.vrow'), key=row.dataset.p+'|'+row.dataset.v; st.rank=st.rank||{}; st.rank[key]=Math.max(0,Math.min(9,rankOf(row.dataset.p,row.dataset.v)+parseInt(rk.dataset.rank,10))); save(); render(); return; }
+  var eqb=e.target.closest('button[data-equip]');
+  if(eqb){ var rw=eqb.closest('.vrow'); st.pick[rw.dataset.p]=(st.pick[rw.dataset.p]===rw.dataset.v)?'':rw.dataset.v; save(); render(); return; }
+  var inf=e.target.closest('button[data-info]');
+  if(inf){ var dt=inf.closest('.vrow').querySelector('.vdetail'); dt.hidden=!dt.hidden; return; }
+  var ak=e.target.closest('button[data-awk]');
+  if(ak){ var vn=ak.closest('.stp').dataset.v; st.awk=st.awk||{}; st.awk[vn]=Math.max(0,Math.min(4,awkOf(vn)+parseInt(ak.dataset.awk,10))); save(); var open={}; document.querySelectorAll('details.vcard[open]').forEach(function(d){ open[d.dataset.name]=1; }); render(); document.querySelectorAll('details.vcard').forEach(function(d){ if(open[d.dataset.name]) d.open=true; }); return; }
   var vt=e.target.closest('button[data-vtab]');
   if(vt){ st.vtab=vt.dataset.vtab; save(); render(); return; }
   var ro=e.target.closest('button[data-role]');
@@ -606,7 +661,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-10-27 12:21";
+  var V="2026-10-27 12:36";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
