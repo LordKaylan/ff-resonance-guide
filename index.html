@@ -797,7 +797,7 @@ function rEquipe(){
       '<div class="vrows">'+avail.map(function(v){ return rankRow(p.n,v); }).join('')+'</div></section>';
   });
   h+='<p class="note">'+(later?later+(later>1?' compagnons arrivent':' compagnon arrive')+' dans les chapitres suivants. Avance le chapitre pour les voir.':'Tout le monde est là.')+'</p>';
-  h+='<details class="more"><summary>Rappel : pourquoi tourner les Visions</summary><div class="card gold"><p>Le rang de maîtrise se gagne en combat, par couple compagnon + Vision, et ce qu\'il apprend lui reste même après avoir changé de Vision. Les rangs coûtent de plus en plus cher : <b>MR1 à 10, MR2 à 35, MR3 à 95, MR4 à 195</b>, puis 395, 695, 1 195, 2 195 et 4 195 MRP cumulés.</p><p>Donc : chaque Vision disponible au rang 3 ou 4 sur chaque compagnon (passif, +5 Endurance, compétence active, +8 AP), puis la Vision principale seulement. Les Pots servent à pousser la principale au-delà du rang 6. Les éveils (magicite) se règlent dans l\'onglet Visions et comptent pour tout le monde. Chaque capacité coûte des PA pour être équipée ; seuls les bonus de stats sont gratuits, d\'où l\'intérêt des rangs PA +8.</p></div></details>';
+  h+='<details class="more"><summary>Rappel : pourquoi tourner les Visions</summary><div class="card gold"><p>Le rang de maîtrise se gagne en combat, par couple compagnon + Vision, et ce qu\'il apprend lui reste même après avoir changé de Vision. Les rangs coûtent de plus en plus cher : <b>MR1 à 10, MR2 à 35, MR3 à 95, MR4 à 195</b>, puis 395, 695, 1 195, 2 195 et 4 195 MRP cumulés.</p><p>Donc : chaque Vision disponible au rang 3 ou 4 sur chaque compagnon (passif, +5 Endurance, compétence active, +8 AP), puis la Vision principale seulement. Les Pots servent à pousser la principale au-delà du rang 6. Les compagnons en réserve gagnent aussi des MRP : le banc porte les Visions à monter, l\'équipe active garde ses principales. Seule exception, les Pots : celui qui examine doit être dans l\'équipe avec la Vision à booster. Les éveils (magicite) se règlent dans l\'onglet Visions et comptent pour tout le monde. Chaque capacité coûte des PA pour être équipée ; seuls les bonus de stats sont gratuits, d\'où l\'intérêt des rangs PA +8.</p></div></details>';
   return h;
 }
 var ROLES=[]; D.visions.forEach(function(v){ if(ROLES.indexOf(v.r)<0) ROLES.push(v.r); });
@@ -913,7 +913,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-10-28 14:48";
+  var V="2026-10-28 15:02";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
