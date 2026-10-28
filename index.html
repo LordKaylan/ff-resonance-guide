@@ -553,7 +553,10 @@ var BUILDS=[
  {p:"Lid",from:2,main:"Zidane",why:"Elle vient d'arriver, rien à creuser encore : elle porte Zidane jusqu'au rang 3 ou 4 (Steal, +5 Endurance, choc renforcé sur ennemis affaiblis), puis Noctis.",
   eq:[["Zidane","Steal"],["Zidane","Free Energy"],["Zidane","Steal Strength"],["Zidane","Steal Speed"],["Zidane","Insult to Injury"],["Zidane","Thievery"]],
   rot:["Noctis","Cloud","Tronn","Warrior of Light"],mag:"Rien sur elle."},
- {p:"Lid",from:3,main:"Tidus",why:"Tidus est sa Vision : attaque physique +20 %, choc +20 %, Spiral Cut qui donne Bravoure, First Strike pour agir en premier.",
+ {p:"Lid",from:3,main:"Squall",alt:"Tidus",why:"Tant que Tidus (ouest d'Olderion) n'est pas trouvé : Squall colle à son profil de commando. Bravoure, Deprotect ajouté, Attaque +30 %, Gut Rip pour les critiques garantis sur un ennemi en choc.",
+  eq:[["Squall","Bravery"],["Squall","Fire"],["Squall","Water"],["Squall","Silence"],["Squall","Gut Rip"],["Squall","Improvement"],["Squall","Add Deprotect"],["Squall","Physical Attack +30%"]],
+  rot:["Zidane","Noctis","Firion","Cloud"],mag:"Rien sur elle."},
+ {p:"Lid",from:3,main:"Tidus",alt:"Squall",why:"Tidus est sa Vision : attaque physique +20 %, choc +20 %, Spiral Cut qui donne Bravoure, First Strike pour agir en premier. Squall reste sa meilleure rotation (Esprit +5, Gut Rip, Trigger).",
   eq:[["Tidus","Spiral Cut"],["Tidus","Slice & Dice - Water"],["Tidus","Slice & Dice - Wind"],["Tidus","Cure"],["Tidus","First Strike"],["Tidus","Focus"],["Tidus","Stagger Power +20%"],["Tidus","Physical Attack +20%"]],
   rot:["Noctis","Firion","Squall","Cloud","Zidane"],mag:"1er éveil de Tidus (Bravery, Speed +10 %) quand Leah et Cloud sont servis."},
  {p:"Lid",from:5,main:"Tidus",alt:"Clive",why:"Energy Rain en zone, Haste et Haste Opener : elle accélère l'équipe. Clive (feu, choc +30 %) si tu veux un pur briseur.",
@@ -611,11 +614,10 @@ function rBuilds(){
     if(p.j>st.chap){ later++; return; }
     var mine=BUILDS.filter(function(b){ return b.p===p.n&&b.from<=st.chap; });
     if(!mine.length) return;
-    var cur=st.bph&&st.bph[p.n]; var b=null;
-    mine.forEach(function(x){ if(x.from===cur) b=x; }); if(!b) b=mine[mine.length-1];
+    var cur=st.bph&&st.bph[p.n]; var b=(cur!==undefined&&mine[cur])?mine[cur]:mine[mine.length-1];
     var cap=(st.apcap&&st.apcap[p.n])||0;
     h+='<section class="hero"><header><h3>'+esc(p.n)+'</h3><small>'+esc(p.r)+'</small></header>';
-    if(mine.length>1){ h+='<div class="chips">'; mine.forEach(function(x){ h+='<button type="button" data-bph="'+x.from+'" data-p="'+esc(p.n)+'" aria-pressed="'+(x===b)+'">dès ch. '+x.from+'</button>'; }); h+='</div>'; }
+    if(mine.length>1){ h+='<div class="chips">'; mine.forEach(function(x,i){ h+='<button type="button" data-bph="'+i+'" data-p="'+esc(p.n)+'" aria-pressed="'+(x===b)+'">dès ch. '+x.from+(x.alt&&x.main!==x.alt&&mine.filter(function(y){return y.from===x.from;}).length>1?' · '+x.main:'')+'</button>'; }); h+='</div>'; }
     h+='<div class="vsum"><span>Principale : <b>'+esc(b.main)+'</b></span>'+(b.alt?'<span>·</span><span>variante : '+esc(b.alt)+'</span>':'')+'</div>'+
        '<p class="note">'+esc(b.why)+'</p>';
     var tot=0, rows='';
@@ -911,7 +913,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-10-28 13:13";
+  var V="2026-10-28 14:48";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
