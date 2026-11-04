@@ -352,9 +352,7 @@ var CH=[
   {k:"ch4e",g:"vision",t:"Cecil, centre du territoire de Zoldaad"},
   {k:"ch4f",g:"vision",t:"Shantotto, nord du territoire de Zoldaad"},
   {k:"ch4g",g:"vision",t:"Y'shtola, sud du territoire de Zoldaad"},
-  {k:"ch4h",g:"quete",t:"Jake, dans les bas quartiers de Zoldaad (Token Legacy)",s:"Bonus permanent pour Jake, et elle ouvre la suivante."},
-  {k:"ch4i",g:"vision",t:"Amelia, quête Errand's End dans la capitale impériale",s:"S'ouvre après celle de Jake."},
-  {k:"ch4j",g:"quete",t:"Nichol, à Olderion (Nichol's Duty)",s:"Bonus permanent pour Nichol, et c'est elle qui donne Leviathan. Si elle n'apparaît pas encore, reviens après l'aéronef."}
+  {k:"ch4h",g:"quete",t:"Jake et Nichol : leurs requêtes arrivent au chapitre 5",s:"Rien à faire ici. Token Legacy (Jake) et Nichol's Duty (Leviathan) sont des requêtes de compagnons, détaillées au chapitre 5."}
  ]},
  {n:5,t:"Cicatrices du temps",note:"L'aéronef arrive et le monde s'ouvre presque entièrement. Le chapitre le plus chargé. Rien ne presse, c'est juste la liste la plus longue.",items:[
   {k:"ch5a",g:"choix",t:"Jake, première scène à Zoldaad la capitale",s:"Content de l'avoir et compter sur lui : +30 PV. Les fusils seront utiles : +3 Force. Se battre ensemble pour ce monde : +3 Endurance."},
@@ -363,7 +361,10 @@ var CH=[
   {k:"ch5d",g:"vision",t:"Bartz et Vaan au nord de Mysidia, Lightning au sud-est"},
   {k:"ch5e",g:"esper",t:"Ifrit, le volcan qui fume au sud du territoire de Zoldaad"},
   {k:"ch5f",g:"esper",t:"Shiva, petite île à l'ouest de Mysidia, dans la tempête de neige"},
-  {k:"ch5g",g:"esper",t:"Leviathan, en finissant la quête de Nichol à Olderion"},
+  {k:"ch5g",g:"quete",t:"Nichol's Duty : parle à Nichol à Olderion, avec l'aéronef",s:"Requête de compagnon, Nichol dans l'équipe active. Puis le pêcheur énervé près des boutiques, le lac Dorr, le sud-est du continent, la grotte des Eaux, retour au lac. Bonus permanent pour Nichol."},
+  {k:"ch5g2",g:"esper",t:"Leviathan, à la fin de Nichol's Duty"},
+  {k:"ch5g3",g:"quete",t:"Token Legacy : dors à l'auberge d'une ville après les Ruines sans nom",s:"Requête de Jake, déclenchée par une scène pendant la nuit (auberge d'Olderion d'après un guide, pas un repos sur l'aéronef). Avoir fait la discussion active avec Jake à Sunioo aide. Si rien ne se passe, avance l'histoire et réessaie, parfois seulement au chapitre 6. Puis marchand d'infos des bas quartiers, train de la capitale, Kellis Station, Shera au château. Bonus permanent pour Jake."},
+  {k:"ch5g4",g:"vision",t:"Amelia, quête Errand's End dans la capitale impériale",s:"S'ouvre après Token Legacy."},
   {k:"ch5h",g:"vision",t:"Aileen, quête Forger of Wills à Dilmagia",s:"Elle forge ensuite des armes avec l'adamantite (8 à trouver)."},
   {k:"ch5i",g:"vision",t:"Victoria, quête Victoria Revivified à Mysidia"},
   {k:"ch5j",g:"vision",t:"Camille, quête The Call from Beyond aux Résidences impériales",s:"Train de la capitale depuis n'importe quel quartier."},
@@ -916,7 +917,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-11-04 17:21";
+  var V="2026-11-04 19:09";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
