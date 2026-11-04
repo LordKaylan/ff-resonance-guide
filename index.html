@@ -611,7 +611,7 @@ function findSkill(vn,sn){
 }
 function rBuilds(){
   var h='<div class="chaphead"><h2>Builds</h2><span class="chapwhere">Chapitre <b>'+st.chap+'</b> · <button type="button" class="lnk" data-tab-go="chapitres">changer</button></span></div>'+
-   '<p class="note">Une proposition par compagnon et par phase, calculée avec le coût en PA de chaque capacité. Les lignes sont dans l\'ordre de priorité : si ta capacité PA est dépassée, coupe par le bas. Entre ta capacité PA (visible en jeu) pour voir où ça s\'arrête.</p>';
+   '<p class="note">Une proposition par compagnon et par phase, calculée avec le coût en PA de chaque capacité. Les lignes sont dans l\'ordre de priorité : si ta capacité PA est dépassée, coupe par le bas. Entre ta capacité PA (visible en jeu) pour voir où ça s\'arrête. Quand la principale est au rang 9, remplace ses capacités de maîtrise par son Spirit of X : une seule ligne, tout actif.</p>';
   var later=0;
   D.party.forEach(function(p){
     if(p.j>st.chap){ later++; return; }
@@ -630,7 +630,7 @@ function rBuilds(){
     });
     h+='<div class="vr1" style="justify-content:space-between"><b>À équiper</b><label class="apcap">Capacité PA <input type="number" min="0" max="999" inputmode="numeric" data-apcap="'+esc(p.n)+'" value="'+(cap||'')+'" placeholder="?"></label></div>'+
        '<ul class="sk">'+rows+'</ul><p class="note"><span class="aptot">Total : <b>'+tot+' PA</b>'+(cap?' sur '+cap:'')+'.</span> Les capacités d\'une autre Vision restent équipables si ce compagnon les a apprises avec elle.</p>'+
-       '<p><b>Rotation ensuite</b> (rang 3 ou 4 chacune) : '+b.rot.map(esc).join(', ')+'.</p>'+
+       '<p><b>Rotation ensuite</b> (rang 4 chacune, rang 9 pour Terra, Squall, Shantotto et Cloud) : '+b.rot.map(esc).join(', ')+'.</p>'+
        '<p class="note"><b>Magicite</b> : '+esc(b.mag)+'</p>'+
        '<div><button type="button" class="btn primary" data-apply="'+esc(p.n)+'" data-main="'+esc(b.main)+'">Marquer '+esc(b.main)+' comme équipée</button></div></section>';
   });
@@ -786,7 +786,7 @@ function rankRow(p,v){
 }
 function rEquipe(){
   var h='<div class="chaphead"><h2>Équipe</h2><span class="chapwhere">Chapitre <b>'+st.chap+'</b> · <button type="button" class="lnk" data-tab-go="chapitres">changer</button></span></div>'+
-   '<p class="note">Une ligne par Vision disponible, avec le rang de maîtrise atteint par ce compagnon. Monte chaque Vision au rang 3 ou 4, puis creuse celle que tu équipes (étoile). Le trait clair marque le rang 4, celui du +8 AP.</p>';
+   '<p class="note">Une ligne par Vision disponible, avec le rang de maîtrise atteint par ce compagnon. La principale (étoile) jusqu\'au rang 9, puis Spirit of X équipé pour libérer des PA. Les autres au rang 4, sauf Terra (Dépasser les limites), Squall (Double Action), Shantotto (Dualcast) et Cloud (Critical Boost) qui méritent le 9. Le trait clair marque le rang 4, celui du +8 AP.</p>';
   var later=0;
   D.party.forEach(function(p){
     if(p.j>st.chap){ later++; return; }
@@ -916,7 +916,7 @@ render();
 </script>
 <script>
 (function(){
-  var V="2026-11-03 16:36";
+  var V="2026-11-04 17:21";
   if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js"); }
   var shown=false;
   function check(){ if(shown||!navigator.onLine) return; fetch("./version.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(j){
